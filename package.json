@@ -1,0 +1,24 @@
+{
+  "name": "monpecs",
+  "version": "0.1.0",
+  "description": "Une version digitale du classeur PECS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdespres/monpecs.git"
+  },
+  "keywords": [
+    "pecs",
+    "classeur",
+    "binder"
+  ],
+  "author": "Gwénaël Després",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gdespres/monpecs/issues"
+  },
+  "homepage": "https://github.com/gdespres/monpecs#readme"
+}

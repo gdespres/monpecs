@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to MonPecs</title>
+  </head>
+  <body>
+    <div>
+      <h1>Welcome to MonPecs</h1>
+      <a href="javascript:login();">Login with Facebook</a>
+      <input id="file" type="file" />
+
+    </div>
+      <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyDMQLll9Smivj3rm4Ldsu2dGKqEiddNsM4",
+          authDomain: "monpecs.firebaseapp.com",
+          databaseURL: "https://monpecs.firebaseio.com",
+          storageBucket: "monpecs.appspot.com",
+          messagingSenderId: "756038652409"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+/*
+        function writeUserData(uid, firstname, lastname, email) {
+          database.ref('users/' + uid).set({
+            firstname : firstname,
+            lastname  : lastname,
+            email     : email
+          });
+        }
+        writeUserData(123456789, 'Toto', 'Titi', 'toto.titi@gmail.com');
+*/
+        var usersRef = database.ref('users');
+        usersRef.on('child_added', function(data) {
+            console.info("Ajout d'un utilisateur '" + data.key + "' : ", data.val());
+        });
+        usersRef.on('child_changed', function(data) {
+            console.info("Modification d'un utilisateur '" + data.key + "' : ", data.val());
+        });
+        usersRef.on('child_removed', function(data) {
+            console.info("Suppression d'un utilisateur '" + data.key + "' : ", data.val());
+        });
+/*
+        firebase.database().ref('users').on('value', function(snapshot) {
+            console.info("users : ", snapshot.val());
+        });
+*/
+
+var connectedRef = firebase.database().ref(".info/connected");
+connectedRef.on("value", function(snap) {
+  if (snap.val() === true) {
+    console.info("inline");
+  } else {
+    console.info("offline");
+  }
+});
+
+// since I can connect from multiple devices or browser tabs, we store each connection instance separately
+// any time that connectionsRef's value is null (i.e. has no children) I am offline
+var myConnectionsRef = firebase.database().ref('users/joe/connections');
+
+// stores the timestamp of my last disconnect (the last time I was seen online)
+var lastOnlineRef = firebase.database().ref('users/joe/lastOnline');
+
+var connectedRef = firebase.database().ref('.info/connected');
+connectedRef.on('value', function(snap) {
+  if (snap.val() === true) {
+    // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+
+    // add this device to my connections list
+    // this value could contain info about the device or a timestamp too
+    var con = myConnectionsRef.push(true);
+
+    // when I disconnect, remove this device
+    con.onDisconnect().remove();
+
+    // when I disconnect, update the last time I was seen online
+    lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+  }
+});
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    console.info("l'utilisateur s'est connecté : ", user);
+  } else {
+    console.info("l'utilisateur s'est déconnecté : ", user);
+  }
+});
+
+//var email    = "gwenael.despres@gmail.com";
+//var password = "1bfrd9dv!";
+/*
+var email    = "gwenael.despres@wanadoo.fr";
+var password = "azerty35";
+firebase.auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(function(user) {
+      console.info("user : ", user);
+    })
+    .catch(function(error) {
+      console.error("error : ", error);
+    });
+*/
+/*
+var user = firebase.auth().currentUser;
+if (user) {
+    console.info("user logged : ", user);
+} else {
+    console.info("user not logged");
+}
+*/
+/*
+firebase.auth().signOut().then(function() {
+  // Sign-out successful.
+}, function(error) {
+  // An error happened.
+});
+*/
+
+var provider = new firebase.auth.FacebookAuthProvider();
+/*
+provider.addScope('user_birthday');
+provider.setCustomParameters({
+  'display': 'popup'
+});
+*/
+
+function login() {
+  /**
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    // ...
+
+    console.info("user : ", user);
+
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+    console.error("error : ", error);
+  });
+  */
+  firebase.auth().signInWithRedirect(provider);
+}
+
+/*
+firebase.auth().signInWithRedirect(provider);
+*/
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    // ...
+  }
+  // The signed-in user info.
+  var user = result.user;
+  console.info("user : ", user);
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  // ...
+    console.error("error : ", error);
+});
+
+var storageRef = firebase.storage().ref();
+document.querySelector('#file').addEventListener('change', function() {
+    var file = this.files[0];
+    var metadata = {
+        'contentType': file.type
+      };
+      // Push to child path.
+      // [START oncomplete]
+      storageRef.child('images/' + file.name).put(file, metadata).then(function(snapshot) {
+        console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+        console.log(snapshot.metadata);
+        var url = snapshot.metadata.downloadURLs[0];
+        console.log('File available at', url);
+        // [START_EXCLUDE]
+        //document.getElementById('linkbox').innerHTML = '<a href="' +  url + '">Click For File</a>';
+        // [END_EXCLUDE]
+      }).catch(function(error) {
+        // [START onfailure]
+        console.error('Upload failed:', error);
+        // [END onfailure]
+      });
+      // [END oncomplete]
+
+});
+    </script>
+  </body>
+</html>
