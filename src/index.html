@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Welcome to MonPecs</title>
+	<meta name="description" content="Une version digitale du classeur PECS">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /><![endif]-->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css">
+    <!--
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="tabs.css">
+    -->
+</head>
+
+<body>
+	<div>
+		<h1>Welcome to MonPecs</h1>
+
+        <div class="tabbed round">
+            <ul>
+                <li class="nopadding">+</li>
+                <li class="skin-turquoise">Third tab</li>
+                <li class="skin-emerald">Second tab</li>
+                <li class="skin-peter-river active">First tab</li>
+            </ul>
+        </div>
+
+	</div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.5.8/angular-locale_fr-fr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-message-format.js"></script>
+    <!--
+    -->
+	<script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+	<script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyDMQLll9Smivj3rm4Ldsu2dGKqEiddNsM4",
+          authDomain: "monpecs.firebaseapp.com",
+          databaseURL: "https://monpecs.firebaseio.com",
+          storageBucket: "monpecs.appspot.com",
+          messagingSenderId: "756038652409"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="js/bundle.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "monpecs",
+  "description": "Une version digitale du classeur PECS",
+  "main": "index.js",
+  "authors": [
+    "Gwénaël Després"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "pecs",
+    "classeur",
+    "binder"
+  ],
+  "homepage": "https://github.com/gdespres/monpecs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

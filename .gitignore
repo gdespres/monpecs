@@ -1,2 +1,8 @@
 .DS_Store
 firebase-debug.log
+bower_components
+node_modules
+public/lib
+public/css
+public/js
+public/index.html
